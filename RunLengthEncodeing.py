@@ -14,7 +14,6 @@ def run_length_encoding(image):
                 count = 1
         rle.append((current_value, count))
     return rle
-
 image = np.array([
                     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                     [0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0],
@@ -30,3 +29,5 @@ image = np.array([
 rle_encoded = run_length_encoding(image)
 print("Run-Length Encoding:")
 print(rle_encoded)
+
+np.savetxt('rle_encoded.csv', rle_encoded, fmt='%d', delimiter=',')
