@@ -8,7 +8,7 @@ Below are side-by-side comparisons of various images:
 
 | Original Image | Quantized Image (16 batch) | Quantized Image (32 batch) |
 |----------------|----------------------------|----------------------------|
-| ![Original Image](./Resources/OriginalImage.jpg) | ![Quantized Image (16 batch)](./QuantizedImage16.jpg) | ![Quantized Image (32 batch)](./QuantizedImage32.jpg) |
+| ![Original Image](./Resources/OriginalImage.jpg) | ![Quantized Image (16 batch)](./Resources/QuantizedImage16.jpg) | ![Quantized Image (32 batch)](./Resources/QuantizedImage32.jpg) |
 
 ## File Sizes Comparison
 
