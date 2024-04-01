@@ -1,13 +1,6 @@
 # Grayscale Run-Length Encoding (RLE) Project
 
 This project provides a set of Python scripts to perform grayscale image Run-Length Encoding (RLE) compression and decoding. It includes scripts for converting images to and from CSV format, quantizing images, performing RLE encoding, and decoding RLE-encoded images. Additionally, scripts for visualizing images and comparing file sizes before and after compression are provided.
-## File Sizes Comparison
-
-| Size         | Lossless | Lossy     |           |
-|--------------|----------|-----------|-----------|
-|              | Original | 16 batch  | 32 batch  |
-| Encoded      | 8.43 mb  | 6.41 mb   | 4.87 mb   |
-| Decoded      | 6.25 mb  | 6.27 mb   | 6.27 mb   |
 
 ## Sample Images
 
@@ -17,6 +10,13 @@ Below are side-by-side comparisons of various images:
 |----------------|----------------------------|----------------------------|
 | ![Original Image](./Resources/OriginalImage.jpg) | ![Quantized Image (16 batch)](./QuantizedImage16.jpg) | ![Quantized Image (32 batch)](./QuantizedImage32.jpg) |
 
+## File Sizes Comparison
+
+| Size         | Lossless | Lossy     |           |
+|--------------|----------|-----------|-----------|
+|              | Original | 16 batch  | 32 batch  |
+| Encoded      | 8.43 mb  | 6.41 mb   | 4.87 mb   |
+| Decoded      | 6.25 mb  | 6.27 mb   | 6.27 mb   |
 ## Overview
 
 The project contains the following scripts:
@@ -73,22 +73,6 @@ python PlotArray.py
 
 - `ConvertImageToCSV.py` and `ConvertMatrixToCSV.py` are used to convert images or NumPy arrays to CSV format.
 - `ConvertCSVToImage.py` and `ConvertCSVToMatrix.py` are used to convert CSV files back to images or NumPy arrays.
-
-## File Sizes Comparison
-
-| Size         | Lossless | Lossy     |           |
-|--------------|----------|-----------|-----------|
-|              | Original | 16 batch  | 32 batch  |
-| Encoded      | 8.43 mb  | 6.41 mb   | 4.87 mb   |
-| Decoded      | 6.25 mb  | 6.27 mb   | 6.27 mb   |
-
-## Sample Images
-
-Below are side-by-side comparisons of various images:
-
-| Original Image | Quantized Image (16 batch) | Quantized Image (32 batch) |
-|----------------|----------------------------|----------------------------|
-| ![Original Image](./Resources/OriginalImage.jpg) | ![Quantized Image (16 batch)](./QuantizedImage16.jpg) | ![Quantized Image (32 batch)](./QuantizedImage32.jpg) |
 
 ## Requirements
 
