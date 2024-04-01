@@ -1,10 +1,13 @@
 import csv
+import numpy as np
 
 a = []
 
-with open('image.csv', newline='') as csvfile:
+with open('./CSV/image.csv', newline='') as csvfile:
     reader = csv.reader(csvfile)
     for row in reader:
         a.append(row)
 
-print(a)
+a = np.array(a)
+
+print(a.shape)

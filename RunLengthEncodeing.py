@@ -1,4 +1,15 @@
 import numpy as np
+import csv
+a = []
+
+with open('OriginalImage.csv', newline='') as csvfile:
+    reader = csv.reader(csvfile)
+    for row in reader:
+        a.append(row)
+
+a = np.array(a)
+
+# print(a.shape)
 
 def run_length_encoding(image):
     rle = []
@@ -14,20 +25,23 @@ def run_length_encoding(image):
                 count = 1
         rle.append((current_value, count))
     return rle
-image = np.array([
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0,],
-                    [0, 0, 1, 1, 1, 1, 1, 0, 0,],
-                    [0, 0, 1, 0, 0, 0, 0, 0, 0,],
-                    [0, 0, 1, 1, 1, 1, 0, 0, 0,],
-                    [0, 0, 0, 0, 0, 0, 1, 0, 0,],
-                    [0, 0, 0, 0, 0, 0, 1, 0, 0,],
-                    [0, 0, 1, 0, 0, 0, 1, 0, 0,],
-                    [0, 0, 0, 1, 1, 1, 0, 0, 0,],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0,],
-                ])
+# image = np.array([
+#                     [0, 0, 0, 0, 0, 0, 0, 0, 0,],
+#                     [0, 0, 1, 1, 1, 1, 1, 0, 0,],
+#                     [0, 0, 1, 0, 0, 0, 0, 0, 0,],
+#                     [0, 0, 1, 1, 1, 1, 0, 0, 0,],
+#                     [0, 0, 0, 0, 0, 0, 1, 0, 0,],
+#                     [0, 0, 0, 0, 0, 0, 1, 0, 0,],
+#                     [0, 0, 1, 0, 0, 0, 1, 0, 0,],
+#                     [0, 0, 0, 1, 1, 1, 0, 0, 0,],
+#                     [0, 0, 0, 0, 0, 0, 0, 0, 0,],
+#                 ])
+image = a
 
 rle_encoded = run_length_encoding(image)
-print("Run-Length Encoding:")
-print(rle_encoded)
+print(image.shape)
 
-np.savetxt('rle_encoded.csv', rle_encoded, fmt='%d', delimiter=',')
+print("Run-Length Encoding:")
+# print(rle_encoded)
+
+np.savetxt('rle_encoded.csv', rle_encoded, fmt='%s', delimiter=',')

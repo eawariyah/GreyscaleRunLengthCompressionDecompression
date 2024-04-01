@@ -8,7 +8,7 @@ with open('rle_encoded.csv', newline='') as csvfile:
     for row in reader:
         rle_encoded.append([int(val) for val in row])  # Convert strings to integers
 
-print(rle_encoded)
+# print(rle_encoded)
 
 def decode_rle(rle_encoded, image_shape):
     decoded_image = np.zeros(image_shape)
@@ -23,8 +23,8 @@ def decode_rle(rle_encoded, image_shape):
     return decoded_image.astype(int)
 
 # Assuming the shape of the decoded image is the same as the original image
-decoded_image = decode_rle(rle_encoded, (9, 9))
+decoded_image = decode_rle(rle_encoded, (1080, 1600))
 print("\nDecoded Image:")
-print(decoded_image)
+# print(decoded_image)
 
 np.savetxt('rle_decoded.csv', decoded_image, fmt='%d', delimiter=',')
