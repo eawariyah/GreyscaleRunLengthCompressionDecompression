@@ -2,9 +2,9 @@ import numpy as np
 import csv
 a = []
 
-# with open('OriginalImage.csv', newline='') as csvfile:
-# with open('QuantizedImage16.csv', newline='') as csvfile:
-with open('QuantizedImage32.csv', newline='') as csvfile:
+# with open('./CSV/OriginalImage.csv', newline='') as csvfile:
+# with open('./CSV/QuantizedImage16.csv', newline='') as csvfile:
+with open('./CSV/QuantizedImage32.csv', newline='') as csvfile:
 
 
     reader = csv.reader(csvfile)
@@ -48,4 +48,4 @@ print(image.shape)
 print("Run-Length Encoding:")
 # print(rle_encoded)
 
-np.savetxt('rle_encoded.csv', rle_encoded, fmt='%s', delimiter=',')
+np.savetxt('./CSV/rle_encoded.csv', rle_encoded, fmt='%s', delimiter=',')

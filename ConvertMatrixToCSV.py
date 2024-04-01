@@ -12,6 +12,6 @@ image = np.array([
                     [0, 0, 0, 0, 0, 0, 0, 0, 0],
                 ])
 
-np.savetxt('image.csv', image, fmt='%d', delimiter=',')
+np.savetxt('./CSV/image.csv', image, fmt='%d', delimiter=',')
 
-print("Image exported as image.csv")
+print("./CSV/Image exported as image.csv")

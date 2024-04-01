@@ -3,7 +3,7 @@ import csv
 
 rle_encoded = []
 
-with open('rle_encoded.csv', newline='') as csvfile:
+with open('./CSV/rle_encoded.csv', newline='') as csvfile:
     reader = csv.reader(csvfile)
     for row in reader:
         rle_encoded.append([int(val) for val in row])  # Convert strings to integers
@@ -27,4 +27,4 @@ decoded_image = decode_rle(rle_encoded, (1080, 1600))
 print("\nDecoded Image:")
 # print(decoded_image)
 
-np.savetxt('rle_decoded.csv', decoded_image, fmt='%d', delimiter=',')
+np.savetxt('./CSV/rle_decoded.csv', decoded_image, fmt='%d', delimiter=',')

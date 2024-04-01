@@ -11,6 +11,6 @@ quantization_levels = np.arange(0, 256, 16)  # Grouping values every 16 units
 quantized_image = np.digitize(image, quantization_levels) * 16 - 8  # Adjusting to mid-point of each bin
 
 # Save the quantized image
-cv2.imwrite('QuantizedImage16.jpg', quantized_image)
+cv2.imwrite('./Resources/QuantizedImage16.jpg', quantized_image)
 
 print("Quantized image saved as QuantizedImage.jpg")
