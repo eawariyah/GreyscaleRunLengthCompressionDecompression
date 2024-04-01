@@ -2,7 +2,11 @@ import numpy as np
 import csv
 a = []
 
-with open('OriginalImage.csv', newline='') as csvfile:
+# with open('OriginalImage.csv', newline='') as csvfile:
+# with open('QuantizedImage16.csv', newline='') as csvfile:
+with open('QuantizedImage32.csv', newline='') as csvfile:
+
+
     reader = csv.reader(csvfile)
     for row in reader:
         a.append(row)
