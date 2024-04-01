@@ -12,7 +12,7 @@ Below are side-by-side comparisons of various images:
 
 ## File Sizes Comparison
 
-| Size         | Lossless | Lossy     |           |
+| Size         | Lossless | Lossy                 |
 |--------------|----------|-----------|-----------|
 |              | Original | 16 batch  | 32 batch  |
 | Encoded      | 8.43 mb  | 6.41 mb   | 4.87 mb   |
