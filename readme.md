@@ -15,8 +15,8 @@ Below are side-by-side comparisons of various images:
 | Size         | Lossless |   Lossy   |   Lossy   |
 |--------------|----------|-----------|-----------|
 |              | Original | 16 batch  | 32 batch  |
-| Encoded      | 8.43 mb  | 6.41 mb   | 4.87 mb   |
-| Decoded      | 6.25 mb  | 6.27 mb   | 6.27 mb   |
+| Encoded(Compressed)      | 8.43 mb  | 6.41 mb   | 4.87 mb   |
+| Decoded(Decompressed)      | 6.25 mb  | 6.27 mb   | 6.27 mb   |
 ## Overview
 
 The project contains the following scripts:
