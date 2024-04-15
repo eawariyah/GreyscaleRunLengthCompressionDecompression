@@ -1,48 +1,41 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+#include <string.h> // Include string.h for strtok
+
+#define ROWS 1080
+#define COLUMNS 1600
 
 int main() {
-    // Open the CSV file
-    FILE *fp = fopen("./CSV/image.csv", "r");
-    if (fp == NULL) {
-        printf("Error opening CSV file\n");
+    int a[ROWS][COLUMNS];
+
+    FILE *file = fopen("OriginalImage.csv", "r");
+    if (file == NULL) {
+        printf("Error opening file\n");
         return 1;
     }
 
-    // Count the number of rows in the CSV file
-    int rows = 0;
-    char line[1024];
-    while (fgets(line, sizeof(line), fp) != NULL) {
-        rows++;
-    }
-    rewind(fp);
-
-    // Read the CSV file into a 2D array
-    char **a = (char **)malloc(rows * sizeof(char *));
-    for (int i = 0; i < rows; i++) {
-        a[i] = (char *)malloc(1024 * sizeof(char));
-        if (fgets(a[i], 1024, fp) == NULL) {
-            printf("Error reading CSV file\n");
-            for (int j = 0; j < i; j++) {
-                free(a[j]);
-            }
-            free(a);
-            fclose(fp);
-            return 1;
+    char line[4096]; // Assuming maximum line length is 4096 characters
+    int row = 0;
+    while (fgets(line, sizeof(line), file) && row < ROWS) {
+        char *token;
+        token = strtok(line, ",");
+        int col = 0;
+        while (token != NULL && col < COLUMNS) {
+            a[row][col++] = atoi(token);
+            token = strtok(NULL, ",");
         }
-        a[i][strcspn(a[i], "\n")] = '\0'; // Remove newline character
+        row++;
     }
-    fclose(fp);
 
-    // Print the shape of the 2D array
-    printf("Shape: %d x %d\n", rows, strlen(a[0]) / 4 + 1);
+    fclose(file);
 
-    // Free the memory allocated for the 2D array
-    for (int i = 0; i < rows; i++) {
-        free(a[i]);
+    // Printing the array
+    for (int i = 0; i < ROWS; i++) {
+        for (int j = 0; j < COLUMNS; j++) {
+            printf("%d ", a[i][j]);
+        }
+        printf("\n");
     }
-    free(a);
 
     return 0;
 }

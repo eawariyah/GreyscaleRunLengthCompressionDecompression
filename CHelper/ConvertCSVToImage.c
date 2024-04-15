@@ -49,7 +49,7 @@ int main()
     unsigned char image[IMAGE_HEIGHT][IMAGE_WIDTH];
 
     // Load the pixel values from the CSV file
-    load_image_from_csv("OriginalImage.csv", image);
+    load_image_from_csv("../CSV/OriginalImage.csv", image);
     // load_image_from_csv("./CSV/QuantizedImage16.csv", image);
     // load_image_from_csv("./CSV/QuantizedImage32.csv", image);
 
