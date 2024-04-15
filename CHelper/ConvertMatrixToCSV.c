@@ -16,7 +16,7 @@ int main() {
     };
 
     // Open the CSV file for writing
-    FILE *fp = fopen("./CSV/image.csv", "w");
+    FILE *fp = fopen("../CSV/image.csv", "w");
     if (fp == NULL) {
         printf("Error opening CSV file\n");
         return 1;

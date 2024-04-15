@@ -1,36 +1,41 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h> // Include string.h for strtok
 
-#define MAX_ROWS 1080
-#define MAX_COLS 1600
+#define ROWS 1080
+#define COLUMNS 1600
 
 int main() {
-    int a[MAX_ROWS][MAX_COLS]; // Assuming a 2D array of integers
+    int a[ROWS][COLUMNS];
 
-    // Open the CSV file for reading
-    FILE *csvfile = fopen("./CSV/image.csv", "r");
-    if (csvfile == NULL) {
-        printf("Error opening file.\n");
+    FILE *file = fopen("OriginalImage.csv", "r");
+    if (file == NULL) {
+        printf("Error opening file\n");
         return 1;
     }
 
-    // Read each row from the CSV file and store it in the array
-    int row = 0, col;
-    char line[MAX_COLS * 4]; // Assuming each value can have up to 4 digits
-    while (fgets(line, sizeof(line), csvfile)) {
-        col = 0;
-        char *token = strtok(line, ",");
-        while (token != NULL && col < MAX_COLS) {
+    char line[4096]; // Assuming maximum line length is 4096 characters
+    int row = 0;
+    while (fgets(line, sizeof(line), file) && row < ROWS) {
+        char *token;
+        token = strtok(line, ",");
+        int col = 0;
+        while (token != NULL && col < COLUMNS) {
             a[row][col++] = atoi(token);
             token = strtok(NULL, ",");
         }
         row++;
     }
 
-    fclose(csvfile);
+    fclose(file);
 
-    // Print the shape of the array
-    printf("Shape of the array: (%d, %d)\n", row, col);
+    // Printing the array
+    for (int i = 0; i < ROWS; i++) {
+        for (int j = 0; j < COLUMNS; j++) {
+            printf("%d ", a[i][j]);
+        }
+        printf("\n");
+    }
 
     return 0;
 }
