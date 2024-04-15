@@ -1,48 +1,36 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+
+#define MAX_ROWS 1080
+#define MAX_COLS 1600
 
 int main() {
-    // Open the CSV file
-    FILE *fp = fopen("./CSV/image.csv", "r");
-    if (fp == NULL) {
-        printf("Error opening CSV file\n");
+    int a[MAX_ROWS][MAX_COLS]; // Assuming a 2D array of integers
+
+    // Open the CSV file for reading
+    FILE *csvfile = fopen("./CSV/image.csv", "r");
+    if (csvfile == NULL) {
+        printf("Error opening file.\n");
         return 1;
     }
 
-    // Count the number of rows in the CSV file
-    int rows = 0;
-    char line[1024];
-    while (fgets(line, sizeof(line), fp) != NULL) {
-        rows++;
-    }
-    rewind(fp);
-
-    // Read the CSV file into a 2D array
-    char **a = (char **)malloc(rows * sizeof(char *));
-    for (int i = 0; i < rows; i++) {
-        a[i] = (char *)malloc(1024 * sizeof(char));
-        if (fgets(a[i], 1024, fp) == NULL) {
-            printf("Error reading CSV file\n");
-            for (int j = 0; j < i; j++) {
-                free(a[j]);
-            }
-            free(a);
-            fclose(fp);
-            return 1;
+    // Read each row from the CSV file and store it in the array
+    int row = 0, col;
+    char line[MAX_COLS * 4]; // Assuming each value can have up to 4 digits
+    while (fgets(line, sizeof(line), csvfile)) {
+        col = 0;
+        char *token = strtok(line, ",");
+        while (token != NULL && col < MAX_COLS) {
+            a[row][col++] = atoi(token);
+            token = strtok(NULL, ",");
         }
-        a[i][strcspn(a[i], "\n")] = '\0'; // Remove newline character
+        row++;
     }
-    fclose(fp);
 
-    // Print the shape of the 2D array
-    printf("Shape: %d x %d\n", rows, strlen(a[0]) / 4 + 1);
+    fclose(csvfile);
 
-    // Free the memory allocated for the 2D array
-    for (int i = 0; i < rows; i++) {
-        free(a[i]);
-    }
-    free(a);
+    // Print the shape of the array
+    printf("Shape of the array: (%d, %d)\n", row, col);
 
     return 0;
 }
