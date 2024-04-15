@@ -1,34 +1,61 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <opencv2/opencv.hpp>
 
-int main() {
-    // Load the image
-    cv::Mat image = cv::imread("./Resources/OriginalImage.jpg", cv::IMREAD_GRAYSCALE);
-    // cv::Mat image = cv::imread("./Resources/QuantizedImage16.jpg", cv::IMREAD_GRAYSCALE);
-    // cv::Mat image = cv::imread("./Resources/QuantizedImage32.jpg", cv::IMREAD_GRAYSCALE);
+#define IMAGE_WIDTH 1600
+#define IMAGE_HEIGHT 1080
 
-    // Print the image data
-    printf("%s\n", image.dump().c_str());
-
-    // Save the image data to a CSV file
-    FILE *fp = fopen("./CSV/OriginalImage.csv", "w");
-    if (fp == NULL) {
-        printf("Error opening CSV file\n");
-        return 1;
+void load_grayscale_image(const char *filename, unsigned char image[IMAGE_HEIGHT][IMAGE_WIDTH])
+{
+    FILE *file = fopen(filename, "rb");
+    if (file == NULL)
+    {
+        printf("Error opening file %s\n", filename);
+        exit(1);
     }
 
-    for (int i = 0; i < image.rows; i++) {
-        for (int j = 0; j < image.cols; j++) {
-            fprintf(fp, "%d", image.at<uchar>(i, j));
-            if (j < image.cols - 1) {
-                fprintf(fp, ",");
+    fread(image, sizeof(unsigned char), IMAGE_WIDTH * IMAGE_HEIGHT, file);
+    fclose(file);
+}
+
+void save_image_to_csv(const char *filename, unsigned char image[IMAGE_HEIGHT][IMAGE_WIDTH])
+{
+    FILE *file = fopen(filename, "w");
+    if (file == NULL)
+    {
+        printf("Error opening file %s\n", filename);
+        exit(1);
+    }
+
+    for (int i = 0; i < IMAGE_HEIGHT; ++i)
+    {
+        for (int j = 0; j < IMAGE_WIDTH; ++j)
+        {
+            fprintf(file, "%d", image[i][j]);
+            if (j < IMAGE_WIDTH - 1)
+            {
+                fprintf(file, ",");
             }
         }
-        fprintf(fp, "\n");
+        fprintf(file, "\n");
     }
 
-    fclose(fp);
+    fclose(file);
+}
+
+int main()
+{
+    unsigned char image[IMAGE_HEIGHT][IMAGE_WIDTH];
+
+    // Load the grayscale image
+    load_grayscale_image("OriginalImage.jpg", image);
+    // load_grayscale_image("./Resources/QuantizedImage16.raw", image);
+    // load_grayscale_image("./Resources/QuantizedImage32.raw", image);
+
+    // Save the image to CSV
+    save_image_to_csv("OriginalImage.csv", image);
+    // save_image_to_csv("./CSV/QuantizedImage16.csv", image);
+    // save_image_to_csv("./CSV/QuantizedImage32.csv", image);
+
     printf("Image exported as OriginalImage.csv\n");
 
     return 0;

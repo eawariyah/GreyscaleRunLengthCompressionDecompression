@@ -2,22 +2,26 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define IMAGE_WIDTH  1600
+#define IMAGE_WIDTH 1600
 #define IMAGE_HEIGHT 1080
 
-void load_image_from_csv(const char* filename, unsigned char image[IMAGE_HEIGHT][IMAGE_WIDTH]) {
-    FILE* file = fopen(filename, "r");
-    if (file == NULL) {
+void load_image_from_csv(const char *filename, unsigned char image[IMAGE_HEIGHT][IMAGE_WIDTH])
+{
+    FILE *file = fopen(filename, "r");
+    if (file == NULL)
+    {
         printf("Error opening file %s\n", filename);
         exit(1);
     }
 
-    char line[IMAGE_WIDTH * 4];  // Assuming each pixel value can have up to 4 digits
+    char line[IMAGE_WIDTH * 4]; // Assuming each pixel value can have up to 4 digits
     int row = 0;
-    while (fgets(line, sizeof(line), file)) {
-        char* token = strtok(line, ",");
+    while (fgets(line, sizeof(line), file))
+    {
+        char *token = strtok(line, ",");
         int col = 0;
-        while (token != NULL) {
+        while (token != NULL)
+        {
             image[row][col++] = atoi(token);
             token = strtok(NULL, ",");
         }
@@ -27,9 +31,11 @@ void load_image_from_csv(const char* filename, unsigned char image[IMAGE_HEIGHT]
     fclose(file);
 }
 
-void save_image(const char* filename, unsigned char image[IMAGE_HEIGHT][IMAGE_WIDTH]) {
-    FILE* file = fopen(filename, "wb");
-    if (file == NULL) {
+void save_image(const char *filename, unsigned char image[IMAGE_HEIGHT][IMAGE_WIDTH])
+{
+    FILE *file = fopen(filename, "wb");
+    if (file == NULL)
+    {
         printf("Error opening file %s\n", filename);
         exit(1);
     }
@@ -38,7 +44,8 @@ void save_image(const char* filename, unsigned char image[IMAGE_HEIGHT][IMAGE_WI
     fclose(file);
 }
 
-int main() {
+int main()
+{
     unsigned char image[IMAGE_HEIGHT][IMAGE_WIDTH];
 
     // Load the pixel values from the CSV file
