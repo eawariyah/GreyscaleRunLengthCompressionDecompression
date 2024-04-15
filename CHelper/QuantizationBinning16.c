@@ -1,66 +1,84 @@
 #include <stdio.h>
+#include <stdint.h>
 #include <stdlib.h>
-#include <stdint.h> // For uint8_t
 
-#define IMAGE_WIDTH 1600
-#define IMAGE_HEIGHT 1080
+#define WIDTH 1600
+#define HEIGHT 1080
+#define MAX_PIXEL_VALUE 255
+#define QUANTIZATION_LEVELS 16
 
-// Function to read an image from a file
-void readImage(const char *filename, uint8_t image[IMAGE_HEIGHT][IMAGE_WIDTH]) {
+// Function to read the grayscale JPEG image
+uint8_t* readJPEG(const char* filename) {
     FILE *file = fopen(filename, "rb");
     if (file == NULL) {
         printf("Error opening file\n");
         exit(1);
     }
 
-    fread(image, sizeof(uint8_t), IMAGE_WIDTH * IMAGE_HEIGHT, file);
+    // Skipping the header of the JPEG file
+    fseek(file, 2, SEEK_SET);
+    while (fgetc(file) != 0xFF);
+
+    // Reading the image data
+    uint8_t *image = (uint8_t*)malloc(WIDTH * HEIGHT * sizeof(uint8_t));
+    if (image == NULL) {
+        printf("Memory allocation error\n");
+        fclose(file);
+        exit(1);
+    }
+    fread(image, WIDTH * HEIGHT, 1, file);
     fclose(file);
+
+    return image;
 }
 
-// Function to write an image to a file
-void writeImage(const char *filename, uint8_t image[IMAGE_HEIGHT][IMAGE_WIDTH]) {
+// Function to write the image as PGM format
+void writePGM(const char* filename, uint8_t* image) {
     FILE *file = fopen(filename, "wb");
     if (file == NULL) {
         printf("Error opening file\n");
+        free(image);
         exit(1);
     }
 
-    fwrite(image, sizeof(uint8_t), IMAGE_WIDTH * IMAGE_HEIGHT, file);
+    // Writing the PGM header
+    fprintf(file, "P5\n%d %d\n%d\n", WIDTH, HEIGHT, MAX_PIXEL_VALUE);
+
+    // Writing the image data
+    fwrite(image, WIDTH * HEIGHT, 1, file);
     fclose(file);
-}
 
-// Function to apply quantization to an image
-void quantizeImage(uint8_t image[IMAGE_HEIGHT][IMAGE_WIDTH], uint8_t quantized_image[IMAGE_HEIGHT][IMAGE_WIDTH]) {
-    // Define the quantization levels
-    int quantization_levels[16];
-    for (int i = 0; i < 16; i++) {
-        quantization_levels[i] = i * 16;
-    }
-
-    // Apply quantization
-    for (int i = 0; i < IMAGE_HEIGHT; i++) {
-        for (int j = 0; j < IMAGE_WIDTH; j++) {
-            int pixel_value = image[i][j];
-            int bin = pixel_value / 16;
-            quantized_image[i][j] = bin * 16 + 8; // Adjusting to mid-point of each bin
-        }
-    }
+    free(image);
 }
 
 int main() {
-    uint8_t original_image[IMAGE_HEIGHT][IMAGE_WIDTH];
-    uint8_t quantized_image[IMAGE_HEIGHT][IMAGE_WIDTH];
+    const char* originalFilename = "OriginalImage.jpg";
+    const char* quantizedFilename = "QuantizedImage16.pgm";
 
-    // Read the original grayscale image
-    readImage("OriginalImage.jpg", original_image);
+    // Read the grayscale JPEG image
+    uint8_t* image = readJPEG(originalFilename);
+
+    // Define the quantization levels
+    uint8_t quantizationLevels[QUANTIZATION_LEVELS];
+    for (int i = 0; i < QUANTIZATION_LEVELS; i++) {
+        quantizationLevels[i] = i * (MAX_PIXEL_VALUE / (QUANTIZATION_LEVELS - 1));
+    }
 
     // Apply quantization
-    quantizeImage(original_image, quantized_image);
+    for (int i = 0; i < WIDTH * HEIGHT; i++) {
+        uint8_t pixelValue = image[i];
+        for (int j = 0; j < QUANTIZATION_LEVELS; j++) {
+            if (pixelValue < quantizationLevels[j]) {
+                image[i] = quantizationLevels[j];
+                break;
+            }
+        }
+    }
 
-    // Save the quantized image
-    writeImage("QuantizedImage16.jpg", quantized_image);
+    // Write the quantized image as PGM
+    writePGM(quantizedFilename, image);
 
-    printf("Quantized image saved as QuantizedImage.jpg\n");
+    printf("Quantized image saved as %s\n", quantizedFilename);
 
     return 0;
 }

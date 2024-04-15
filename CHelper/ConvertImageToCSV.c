@@ -1,38 +1,30 @@
 #include <stdio.h>
-#include <stdlib.h>
 
-#define IMAGE_WIDTH 1600
-#define IMAGE_HEIGHT 1080
+#define ROWS 1080
+#define COLS 1600
 
-void load_grayscale_image(const char *filename, unsigned char image[IMAGE_HEIGHT][IMAGE_WIDTH])
-{
+void readImage(const char *filename, unsigned char image[ROWS][COLS]) {
     FILE *file = fopen(filename, "rb");
-    if (file == NULL)
-    {
+    if (file == NULL) {
         printf("Error opening file %s\n", filename);
-        exit(1);
+        return;
     }
 
-    fread(image, sizeof(unsigned char), IMAGE_WIDTH * IMAGE_HEIGHT, file);
+    fread(image, sizeof(unsigned char), ROWS * COLS, file);
     fclose(file);
 }
 
-void save_image_to_csv(const char *filename, unsigned char image[IMAGE_HEIGHT][IMAGE_WIDTH])
-{
+void writeCSV(const char *filename, unsigned char image[ROWS][COLS]) {
     FILE *file = fopen(filename, "w");
-    if (file == NULL)
-    {
+    if (file == NULL) {
         printf("Error opening file %s\n", filename);
-        exit(1);
+        return;
     }
 
-    for (int i = 0; i < IMAGE_HEIGHT; ++i)
-    {
-        for (int j = 0; j < IMAGE_WIDTH; ++j)
-        {
+    for (int i = 0; i < ROWS; i++) {
+        for (int j = 0; j < COLS; j++) {
             fprintf(file, "%d", image[i][j]);
-            if (j < IMAGE_WIDTH - 1)
-            {
+            if (j < COLS - 1) {
                 fprintf(file, ",");
             }
         }
@@ -42,21 +34,15 @@ void save_image_to_csv(const char *filename, unsigned char image[IMAGE_HEIGHT][I
     fclose(file);
 }
 
-int main()
-{
-    unsigned char image[IMAGE_HEIGHT][IMAGE_WIDTH];
+int main() {
+    unsigned char image[ROWS][COLS];
+    const char *inputFilename = "OriginalImage.jpg";
+    const char *outputFilename = "OriginalImage.csv";
 
-    // Load the grayscale image
-    load_grayscale_image("OriginalImage.jpg", image);
-    // load_grayscale_image("./Resources/QuantizedImage16.raw", image);
-    // load_grayscale_image("./Resources/QuantizedImage32.raw", image);
+    readImage(inputFilename, image);
+    writeCSV(outputFilename, image);
 
-    // Save the image to CSV
-    save_image_to_csv("OriginalImage.csv", image);
-    // save_image_to_csv("./CSV/QuantizedImage16.csv", image);
-    // save_image_to_csv("./CSV/QuantizedImage32.csv", image);
-
-    printf("Image exported as OriginalImage.csv\n");
+    printf("Image exported as %s\n", outputFilename);
 
     return 0;
 }

@@ -2,9 +2,10 @@
 #include <stdlib.h>
 #include <stdint.h> // For uint8_t
 #include <stdbool.h> // For bool
+#include <jpeglib.h>
 
-#define IMAGE_WIDTH 640
-#define IMAGE_HEIGHT 480
+#define IMAGE_WIDTH 1600
+#define IMAGE_HEIGHT 1800
 
 // Function to read an image from a file
 void readImage(const char *filename, uint8_t image[IMAGE_HEIGHT][IMAGE_WIDTH]) {
@@ -18,16 +19,39 @@ void readImage(const char *filename, uint8_t image[IMAGE_HEIGHT][IMAGE_WIDTH]) {
     fclose(file);
 }
 
-// Function to write an image to a file
-void writeImage(const char *filename, uint8_t image[IMAGE_HEIGHT][IMAGE_WIDTH]) {
-    FILE *file = fopen(filename, "wb");
-    if (file == NULL) {
-        printf("Error opening file\n");
+// Function to write an image to a JPEG file
+void writeJPEG(const char *filename, uint8_t image[IMAGE_HEIGHT][IMAGE_WIDTH]) {
+    struct jpeg_compress_struct cinfo;
+    struct jpeg_error_mgr jerr;
+    JSAMPROW row_pointer[1];
+    FILE *outfile = fopen(filename, "wb");
+
+    if (!outfile) {
+        printf("Error opening output JPEG file\n");
         exit(1);
     }
 
-    fwrite(image, sizeof(uint8_t), IMAGE_WIDTH * IMAGE_HEIGHT, file);
-    fclose(file);
+    cinfo.err = jpeg_std_error(&jerr);
+    jpeg_create_compress(&cinfo);
+    jpeg_stdio_dest(&cinfo, outfile);
+
+    cinfo.image_width = IMAGE_WIDTH;
+    cinfo.image_height = IMAGE_HEIGHT;
+    cinfo.input_components = 1; // grayscale image
+    cinfo.in_color_space = JCS_GRAYSCALE;
+    jpeg_set_defaults(&cinfo);
+    jpeg_set_quality(&cinfo, 100, TRUE);
+
+    jpeg_start_compress(&cinfo, TRUE);
+
+    while (cinfo.next_scanline < cinfo.image_height) {
+        row_pointer[0] = &image[cinfo.next_scanline][0];
+        (void)jpeg_write_scanlines(&cinfo, row_pointer, 1);
+    }
+
+    jpeg_finish_compress(&cinfo);
+    fclose(outfile);
+    jpeg_destroy_compress(&cinfo);
 }
 
 // Function to apply quantization to an image
@@ -58,10 +82,10 @@ int main() {
     // Apply quantization
     quantizeImage(original_image, quantized_image);
 
-    // Save the quantized image
-    writeImage("QuantizedImage32.jpg", quantized_image);
+    // Save the quantized image as a JPEG file
+    writeJPEG("QuantizedImage32.jpg", quantized_image);
 
-    printf("Quantized image saved as QuantizedImage.jpg\n");
+    printf("Quantized image saved as QuantizedImage32.jpg\n");
 
     return 0;
 }
