@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 # Read the image data from the CSV file
-image_data = np.loadtxt('./CHelper/OriginalImage.csv', dtype=np.uint8, delimiter=',')
+image_data = np.loadtxt('./Resources/OriginalImage.csv', dtype=np.uint8, delimiter=',')
 
 # Reshape the image data into the original shape (assuming grayscale image)
 height, width = image_data.shape
