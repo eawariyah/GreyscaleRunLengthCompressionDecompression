@@ -1,30 +1,63 @@
 #include <stdio.h>
+#include <stdint.h>
 
-#define ROWS 1080
-#define COLS 1600
+#define WIDTH 1600
+#define HEIGHT 1080
 
-void readImage(const char *filename, unsigned char image[ROWS][COLS]) {
+#pragma pack(push, 1)
+typedef struct {
+    uint16_t bfType;
+    uint32_t bfSize;
+    uint16_t bfReserved1;
+    uint16_t bfReserved2;
+    uint32_t bfOffBits;
+    uint32_t biSize;
+    int32_t biWidth;
+    int32_t biHeight;
+    uint16_t biPlanes;
+    uint16_t biBitCount;
+    uint32_t biCompression;
+    uint32_t biSizeImage;
+    int32_t biXPelsPerMeter;
+    int32_t biYPelsPerMeter;
+    uint32_t biClrUsed;
+    uint32_t biClrImportant;
+} BMPHeader;
+#pragma pack(pop)
+
+void readBMP(const char *filename, uint8_t image[HEIGHT][WIDTH]) {
     FILE *file = fopen(filename, "rb");
     if (file == NULL) {
         printf("Error opening file %s\n", filename);
         return;
     }
 
-    fread(image, sizeof(unsigned char), ROWS * COLS, file);
+    BMPHeader header;
+    fread(&header, sizeof(BMPHeader), 1, file);
+
+    if (header.bfType != 0x4D42 || header.biWidth != WIDTH || header.biHeight != HEIGHT || header.biBitCount != 8) {
+        printf("Invalid BMP format\n");
+        fclose(file);
+        return;
+    }
+
+    fseek(file, header.bfOffBits, SEEK_SET);
+    fread(image, sizeof(uint8_t), WIDTH * HEIGHT, file);
+
     fclose(file);
 }
 
-void writeCSV(const char *filename, unsigned char image[ROWS][COLS]) {
+void writeCSV(const char *filename, const uint8_t image[HEIGHT][WIDTH]) {
     FILE *file = fopen(filename, "w");
     if (file == NULL) {
         printf("Error opening file %s\n", filename);
         return;
     }
 
-    for (int i = 0; i < ROWS; i++) {
-        for (int j = 0; j < COLS; j++) {
+    for (int i = HEIGHT - 1; i >= 0; i--) { // Start from HEIGHT - 1 and move upwards
+        for (int j = 0; j < WIDTH; j++) {
             fprintf(file, "%d", image[i][j]);
-            if (j < COLS - 1) {
+            if (j < WIDTH - 1) {
                 fprintf(file, ",");
             }
         }
@@ -35,14 +68,9 @@ void writeCSV(const char *filename, unsigned char image[ROWS][COLS]) {
 }
 
 int main() {
-    unsigned char image[ROWS][COLS];
-    const char *inputFilename = "OriginalImage.jpg";
-    const char *outputFilename = "OriginalImage.csv";
-
-    readImage(inputFilename, image);
-    writeCSV(outputFilename, image);
-
-    printf("Image exported as %s\n", outputFilename);
-
+    uint8_t image[HEIGHT][WIDTH];
+    readBMP("OriginalImage.bmp", image);
+    writeCSV("OriginalImage.csv", image);
+    printf("Image exported as OriginalImage.csv\n");
     return 0;
 }
