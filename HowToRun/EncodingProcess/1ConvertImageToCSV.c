@@ -69,9 +69,9 @@ void writeCSV(const char *filename, const uint8_t image[HEIGHT][WIDTH]) {
 
 int main() {
     uint8_t image[HEIGHT][WIDTH];
-    // readBMP("../Input/OriginalImage.bmp", image);
+    readBMP("../Input/OriginalImage.bmp", image);
     // readBMP("../Input/QuantizedImage16.bmp", image);
-    readBMP("../Input/QuantizedImage32.bmp", image);    
+    // readBMP("../Input/QuantizedImage32.bmp", image);    
     writeCSV("../Output/CSV/OriginalImage.csv", image);
     printf("Image exported as OriginalImage.csv\n");
     return 0;
